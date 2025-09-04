@@ -1,6 +1,5 @@
 package com.example.inditex.application;
 
-import com.example.inditex.commons.Todo;
 import com.example.inditex.domain.ProductPrice;
 import com.example.inditex.domain.ProductPriceService;
 import lombok.RequiredArgsConstructor;

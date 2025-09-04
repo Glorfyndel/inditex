@@ -3,8 +3,6 @@ package com.example.inditex.infrastructure;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDateTime;
-
 public interface PriceEntityRepository extends JpaRepository<PriceEntity, PriceEntity.Id> {
 
     @Query("""
@@ -16,5 +14,5 @@ public interface PriceEntityRepository extends JpaRepository<PriceEntity, PriceE
             ORDER BY p.priority DESC
             LIMIT 1
             """)
-    PriceEntity findCurrentPrice(long brandId, long productId, LocalDateTime applicationDate);
+    PriceEntity findCurrentPrice(long brandId, long productId, String applicationDate);
 }

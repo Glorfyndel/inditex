@@ -4,11 +4,9 @@ import com.example.inditex.domain.Currency;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "prices")
@@ -22,13 +20,14 @@ public class PriceEntity implements Serializable {
     @EmbeddedId
     private Id id;
 
-    private LocalDateTime startDate;
+    private String startDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH.mm.ss")
-    private LocalDateTime endDate;
+    private String endDate;
 
     private BigDecimal price;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "curr")
     private Currency currency;
 
     private int priority;
