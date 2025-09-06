@@ -2,7 +2,10 @@ package com.example.inditex.application;
 
 import com.example.inditex.domain.ProductPrice;
 import com.example.inditex.domain.ProductPriceService;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,11 +16,14 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/inditex")
 @RequiredArgsConstructor
+@Validated
 public class PricesController {
     private final ProductPriceService productPriceService;
 
     @GetMapping("/prices")
-    public PriceResponse getPrices(@RequestParam long brandId, @RequestParam long productId, @RequestParam LocalDateTime applicationDate) {
+    public PriceResponse getPrices(@RequestParam @NotNull @Min(0) long brandId,
+                                   @RequestParam @NotNull @Min(0) long productId,
+                                   @RequestParam LocalDateTime applicationDate) {
         final ProductPrice productPrice = productPriceService.getProductPrice(brandId, productId, applicationDate);
 
         final PriceResponse priceResponse = PriceResponse.builder()
