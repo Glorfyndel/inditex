@@ -1,7 +1,9 @@
 package com.example.inditex.application;
 
+import com.example.inditex.domain.PriceNotFoundException;
 import com.example.inditex.domain.ProductPriceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,6 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
+import java.time.LocalDateTime;
+
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -33,15 +39,31 @@ class PricesControllerTest {
     @MockitoBean
     ProductPriceService productPriceService;
 
+    @DisplayName("Constraints validation")
     @Test
-    void brandIdNegative() throws Exception {
+    void constraintsValidation() throws Exception {
         mockMvc.perform(get("/inditex/prices")
                         .param("brandId", "-1")
                         .param("productId", "-35455")
                         .param("applicationDate", "2020-06-14T10:00:00"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(jsonPath("$.constraints['brandId']")
+                .andExpect(jsonPath("$.constraints['getPrices.brandId']")
+                        .value("must be greater than or equal to 0"))
+                .andExpect(jsonPath("$.constraints['getPrices.productId']")
                         .value("must be greater than or equal to 0"));
+    }
+
+    @DisplayName("Price not found")
+    @Test
+    void notFound() throws Exception {
+        when(productPriceService.getProductPrice(eq(1L), eq(35455L), eq(LocalDateTime.parse("2020-06-14T10:00:00"))))
+                .thenThrow(new PriceNotFoundException("%s - %s - %s".formatted(1L, 35455L, "2020-06-14T10:00:00")));
+
+        mockMvc.perform(get("/inditex/prices")
+                        .param("brandId", "1")
+                        .param("productId", "35455")
+                        .param("applicationDate", "2020-06-14T10:00:00"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
 }

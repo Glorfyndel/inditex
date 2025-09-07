@@ -3,16 +3,18 @@ package com.example.inditex.infrastructure;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface PriceEntityRepository extends JpaRepository<PriceEntity, PriceEntity.Id> {
 
-    @Query("""
-            SELECT p
-            FROM PriceEntity p
-            WHERE p.id.brandId = :brandId
-              AND p.id.productId = :productId
-              AND :applicationDate BETWEEN p.startDate AND p.endDate
+    @Query(nativeQuery = true, value = """
+            SELECT *
+            FROM prices p
+            WHERE p.brand_id = :brandId
+              AND p.product_id = :productId
+              AND :applicationDate BETWEEN p.start_date AND p.end_date
             ORDER BY p.priority DESC
             LIMIT 1
             """)
-    PriceEntity findCurrentPrice(long brandId, long productId, String applicationDate);
+    Optional<PriceEntity> findCurrentPrice(long brandId, long productId, String applicationDate);
 }

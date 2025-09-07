@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.xml",
         "spring.h2.console.enabled=true",
         "spring.jpa.hibernate.ddl-auto=validate",
-        "spring.jpa.properties.hibernate.show_sql=true",
-        "spring.jpa.properties.hibernate.format_sql=true",
+        "spring.jpa.properties.hibernate.show_sql=false",
+        "spring.jpa.properties.hibernate.format_sql=false",
 })
 public class InditexIntegrationTest {
 

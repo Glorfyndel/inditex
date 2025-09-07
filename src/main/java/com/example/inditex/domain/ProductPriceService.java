@@ -17,7 +17,8 @@ public class ProductPriceService {
     private final PriceEntityRepository priceEntityRepository;
 
     public ProductPrice getProductPrice(long brandId, long productId, LocalDateTime applicationDate) {
-        final PriceEntity currentPrice = priceEntityRepository.findCurrentPrice(brandId, productId, applicationDate.format(formatter));
+        final PriceEntity currentPrice = priceEntityRepository.findCurrentPrice(brandId, productId, applicationDate.format(formatter))
+                .orElseThrow(() -> new PriceNotFoundException("%s - %s - %s".formatted(brandId, productId, applicationDate)));
 
         return ProductPrice.builder()
                 .brandId(currentPrice.getId().getBrandId())
