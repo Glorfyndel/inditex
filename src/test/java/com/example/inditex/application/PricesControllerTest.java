@@ -2,7 +2,6 @@ package com.example.inditex.application;
 
 import com.example.inditex.domain.PriceNotFoundException;
 import com.example.inditex.domain.ProductPriceService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -33,13 +30,10 @@ class PricesControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
-    ObjectMapper objectMapper;
-
     @MockitoBean
     ProductPriceService productPriceService;
 
-    @DisplayName("Constraints validation")
+    @DisplayName("Constraints validation brandId and productId must be positive")
     @Test
     void constraintsValidation() throws Exception {
         mockMvc.perform(get("/inditex/prices")
@@ -53,6 +47,18 @@ class PricesControllerTest {
                         .value("must be greater than or equal to 0"));
     }
 
+    @DisplayName("Incorrect date time format")
+    @Test
+    void incorrectDateTimeFormat() throws Exception {
+        mockMvc.perform(get("/inditex/prices")
+                .param("brandId", "1")
+                .param("productId", "35455")
+                .param("applicationDate", "2020-06-14 10:00:00"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(jsonPath("$.detail")
+                        .value("Failed to convert 'applicationDate' with value: '2020-06-14 10:00:00'"));
+    }
+
     @DisplayName("Price not found")
     @Test
     void notFound() throws Exception {
@@ -63,7 +69,8 @@ class PricesControllerTest {
                         .param("brandId", "1")
                         .param("productId", "35455")
                         .param("applicationDate", "2020-06-14T10:00:00"))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(jsonPath("$.detail")
+                        .value("No price found for criteria: 1 - 35455 - 2020-06-14T10:00:00"));
     }
-
 }

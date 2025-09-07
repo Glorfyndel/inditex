@@ -48,7 +48,7 @@ public class InditexIntegrationTest {
     }
 
     @Test
-    @DisplayName("Consulta el precio producto para el 14/06/2020 a las 10:00 -> Debe devolver el precio de la tarifa 1")
+    @DisplayName("Consulta el precio para el 14/06/2020 a las 10:00 -> Debe devolver el precio de la tarifa 1")
     void prueba1() {
         final PriceResponse priceResponse = restClient.get()
                 .uri("/inditex/prices?brandId={brandId}&productId={productId}&applicationDate={applicationDate}",
