@@ -11,11 +11,13 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "prices")
 @DynamicUpdate
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = {"id", "startDate", "endDate", "price", "currency", "priority"})
+@ToString(of = {"id", "startDate", "endDate", "price", "currency", "priority"})
 @Getter
 @Setter
+@Builder
 public class PriceEntity implements Serializable {
     @EmbeddedId
     private Id id;
@@ -35,6 +37,8 @@ public class PriceEntity implements Serializable {
     @Embeddable
     @NoArgsConstructor
     @AllArgsConstructor
+    @EqualsAndHashCode(of = {"brandId", "productId", "priceList"})
+    @ToString(of = {"brandId", "productId", "priceList"})
     @Getter
     @Setter
     @Builder

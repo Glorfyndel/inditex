@@ -9,15 +9,15 @@
  - Para inicializar el proyecto y resolver el ejercicio eh utilizado TDD Outside-In empezando por el test de integración global y bajando hasta la capa de infraestructura.
  - Me he percatado de que el ejercicio se puede resolver enteramente con SQL:
 ```sql
-    SELECT * FROM PRICES 
-    WHERE PRODUCT_ID = :productId 
-    AND BRAND_ID = :brandId 
-    AND START_DATE <= :applicationDate 
-    AND END_DATE > :applicationDate 
-    ORDER BY PRIORITY DESC 
-    LIMIT 1;
+    SELECT *
+    FROM prices p
+    WHERE p.brand_id = :brandId
+      AND p.product_id = :productId
+      AND :applicationDate BETWEEN p.start_date AND p.end_date
+    ORDER BY p.priority DESC, p.price_list DESC
+        LIMIT 1
 ```
- - Esta query funciona aunque START_DATE y END_DATE sean varchar porqué siguen un modelo lexicográfico. Simplifica mucho la lógica de negocio y por tanto el código.
+ - Esta query funciona aunque `start_date` y `end_date` sean varchar porqué siguen un modelo lexicográfico `YYYY-MM-DD-HH.mm.ss > YYYY-MM-DD-HH.mm.ss` siempre y cuando se use en `ORDER BY`. Simplifica mucho la lógica de negocio y por tanto el código.
  - En el enunciado no se explica la regla de negocio si se encuentra varios precios con la misma prioridad. He decidido que se devuelva cualquiera de ellos (el primero que encuentre la query).
 
 ## Ejecutar el proyecto en local :

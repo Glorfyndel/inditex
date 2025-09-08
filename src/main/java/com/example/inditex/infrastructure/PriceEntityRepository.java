@@ -13,7 +13,7 @@ public interface PriceEntityRepository extends JpaRepository<PriceEntity, PriceE
             WHERE p.brand_id = :brandId
               AND p.product_id = :productId
               AND :applicationDate BETWEEN p.start_date AND p.end_date
-            ORDER BY p.priority DESC
+            ORDER BY p.priority DESC, p.price_list DESC
             LIMIT 1
             """)
     Optional<PriceEntity> findCurrentPrice(long brandId, long productId, String applicationDate);

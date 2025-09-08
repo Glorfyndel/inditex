@@ -5,6 +5,7 @@ import com.example.inditex.domain.ProductPrice;
 import com.example.inditex.domain.ProductPriceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +17,7 @@ public class ProductPriceServiceImpl implements ProductPriceService {
     private final PriceEntityRepository priceEntityRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ProductPrice getProductPrice(long brandId, long productId, LocalDateTime applicationDate) {
         final PriceEntity currentPrice = priceEntityRepository.findCurrentPrice(brandId, productId, applicationDate.format(formatter))
                 .orElseThrow(() -> new PriceNotFoundException("%s - %s - %s".formatted(brandId, productId, applicationDate)));
