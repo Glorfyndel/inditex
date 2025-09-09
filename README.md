@@ -5,7 +5,7 @@
  
 ## Decisiones de diseño :
  - La API tendrá un único endpoint 'iniditex/prices' al ser el recurso que se trata en este ejercicio.
- - La tabla 'PRICES' es idéntica al enunciado incluyendo las fechas cuyo formato tipo 'YYYY-MM-DD-HH.MM.SS' no es compatible en BBDD con `date-time` por lo que será un 'varchar' <-> 'String'. Estas fechas se mapearán en `LocalDateTime` para la capa de `domain`.
+ - La tabla `PRICES` es idéntica al enunciado incluyendo las fechas cuyo formato tipo `YYYY-MM-DD-HH.MM.SS` no es compatible en BBDD con `date-time` por lo que será un 'varchar' <-> 'String'. Estas fechas se mapearán en `LocalDateTime` para la capa de `domain`.
  - Para inicializar el proyecto y resolver el ejercicio he utilizado `TDD Outside-In` empezando por el test de integración global y bajando hasta la capa de infraestructura.
  - Al tratarse de un ejercicio sencillo, he podido realizar toda la lógica de selección del precio usando esta SQL query nativa con un `ORDER BY` y `LIMIT 1`  para mayor rendimiento y escalabilidad del código:
 
@@ -33,6 +33,10 @@
 ```bash
     curl -X GET "http://localhost:8080/inditex/prices?productId=35455&brandId=1&applicationDate=2020-06-14T10:00:00"
  ```
+  - La respuesta será : 
+```json
+  {"brandId":1,"productId":35455,"priceList":1,"startDate":"2020-06-14T00:00:00","endDate":"2020-12-31T23:59:59","price":35.50,"currency":"EUR"}
+```
   - Swagger UI estará disponible en
 <http://localhost:8080/swagger-ui/index.html>
 
@@ -40,7 +44,7 @@
 ### 2. Opción 2 : Usando Docker
   - Clonar el proyecto
   - Tener instalado maven y docker (rancher desktop, docker compose, etc)
-  - Ejecutar ```maven clean install -DskipTests -P docker``` en la raíz del proyecto usando el profile `docker` para que genere la imagen docker.
+  - Ejecutar ```mvn clean install -DskipTests -P docker``` en la raíz del proyecto usando el profile `docker` para que genere la imagen docker.
   - Verificar que la imagen existe con :
 ```bash 
     docker image ls | grep 'inditex'
@@ -57,6 +61,10 @@
   - La API estará disponible en 
 ```bash
     curl -X GET "http://localhost:8080/inditex/prices?productId=35455&brandId=1&applicationDate=2020-06-14T10:00:00"
+```
+  - La respuesta será :
+```json
+  {"brandId":1,"productId":35455,"priceList":1,"startDate":"2020-06-14T00:00:00","endDate":"2020-12-31T23:59:59","price":35.50,"currency":"EUR"}
 ```
 - Swagger UI estará disponible en
 <http://localhost:8080/swagger-ui/index.html>

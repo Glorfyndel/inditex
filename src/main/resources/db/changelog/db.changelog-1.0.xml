@@ -16,10 +16,10 @@
             <column name="price_list" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="start_date" type="varchar">
+            <column name="start_date" type="varchar(19)">
                 <constraints nullable="false"/>
             </column>
-            <column name="end_date" type="varchar">
+            <column name="end_date" type="varchar(19)">
                 <constraints nullable="false"/>
             </column>
             <column name="priority" type="int">
