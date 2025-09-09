@@ -1,7 +1,7 @@
 package com.example.inditex.application;
 
-import com.example.inditex.domain.ProductPrice;
-import com.example.inditex.domain.ProductPriceService;
+import com.example.inditex.domain.Price;
+import com.example.inditex.domain.PricesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Validated
 public class PricesController {
-    private final ProductPriceService productPriceService;
+    private final PricesService pricesService;
 
     @Operation(summary = "Get price information based on brand, product and date")
     @ApiResponses(value = {
@@ -40,18 +40,16 @@ public class PricesController {
     public PriceResponse getPrices(@Parameter(required = true, example = "1") @RequestParam @NotNull @Min(0) long brandId,
                                    @Parameter(required = true, example = "35455") @RequestParam @NotNull @Min(0) long productId,
                                    @Parameter(required = true, example = "2020-06-14T10:00:00") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applicationDate) {
-        final ProductPrice productPrice = productPriceService.getProductPrice(brandId, productId, applicationDate);
+        final Price price = pricesService.getProductPrice(brandId, productId, applicationDate);
 
-        final PriceResponse priceResponse = PriceResponse.builder()
-                .brandId(productPrice.brandId())
-                .productId(productPrice.productId())
-                .priceList(productPrice.priceList())
-                .startDate(productPrice.startDate())
-                .endDate(productPrice.endDate())
-                .price(productPrice.price())
-                .currency(productPrice.currency())
+        return PriceResponse.builder()
+                .brandId(price.brandId())
+                .productId(price.productId())
+                .priceList(price.priceList())
+                .startDate(price.startDate())
+                .endDate(price.endDate())
+                .price(price.price())
+                .currency(price.currency())
                 .build();
-
-        return priceResponse;
     }
 }

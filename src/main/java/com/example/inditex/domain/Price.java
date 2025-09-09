@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
-public record ProductPrice(
+public record Price(
         long brandId,
         long productId,
         int priceList,

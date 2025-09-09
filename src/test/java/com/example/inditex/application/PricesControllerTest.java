@@ -1,7 +1,7 @@
 package com.example.inditex.application;
 
 import com.example.inditex.domain.PriceNotFoundException;
-import com.example.inditex.domain.ProductPriceService;
+import com.example.inditex.domain.PricesService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ class PricesControllerTest {
     MockMvc mockMvc;
 
     @MockitoBean
-    ProductPriceService productPriceService;
+    PricesService pricesService;
 
     @DisplayName("Constraints validation brandId and productId must be positive")
     @Test
@@ -62,7 +62,7 @@ class PricesControllerTest {
     @DisplayName("Price not found")
     @Test
     void notFound() throws Exception {
-        when(productPriceService.getProductPrice(eq(1L), eq(35455L), eq(LocalDateTime.parse("2020-06-14T10:00:00"))))
+        when(pricesService.getProductPrice(eq(1L), eq(35455L), eq(LocalDateTime.parse("2020-06-14T10:00:00"))))
                 .thenThrow(new PriceNotFoundException("%s - %s - %s".formatted(1L, 35455L, "2020-06-14T10:00:00")));
 
         mockMvc.perform(get("/inditex/prices")
