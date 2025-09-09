@@ -12,15 +12,15 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest(properties = {
-        "spring.jpa.properties.hibernate.format_sql=true",
+@DataJpaTest(showSql = false, properties = {
+        "spring.jpa.properties.hibernate.format_sql=false",
         "spring.liquibase.enabled=false",
 })
 class PriceEntityRepositoryTest {
     @Autowired
     private PriceEntityRepository priceEntityRepository;
 
-    @DisplayName("Test find current price when different priority => chose the highest priority")
+    @DisplayName("Find current price when different priority -> chose the highest priority")
     @Test
     void testFinPriceWhenDifferentPriority() {
         // GIVEN
@@ -72,7 +72,7 @@ class PriceEntityRepositoryTest {
                         .build());
     }
 
-    @DisplayName("Test find current price when equal priority => chose the last one, highest priceList")
+    @DisplayName("Find current price when equal priority -> chose the last one, highest 'priceList'")
     @Test
     void testFindPriceWhenEqualPriority() {
         // GIVEN
