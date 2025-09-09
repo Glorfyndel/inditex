@@ -5,7 +5,7 @@
  
 ## Decisiones de diseño :
  - La API tendrá un único endpoint 'iniditex/prices' al ser el recurso que se trata en este ejercicio.
- - La tabla `PRICES` es idéntica al enunciado incluyendo las fechas cuyo formato tipo `YYYY-MM-DD-HH.MM.SS` no es compatible en BBDD con `date-time` por lo que será un 'varchar' <-> 'String'. Estas fechas se mapearán en `LocalDateTime` para la capa de `domain`.
+ - La tabla `PRICES` es idéntica al enunciado incluyendo las fechas cuyo formato tipo `YYYY-MM-DD-HH.MM.SS` no es compatible en BBDD con `date-time` por lo que será un `varchar(19)` <-> `String`. Estas fechas se mapearán en `LocalDateTime` para la capa de `domain`.
  - Para inicializar el proyecto y resolver el ejercicio he utilizado `TDD Outside-In` empezando por el test de integración global y bajando hasta la capa de infraestructura.
  - Al tratarse de un ejercicio sencillo, he podido realizar toda la lógica de selección del precio usando esta SQL query nativa con un `ORDER BY` y `LIMIT 1`  para mayor rendimiento y escalabilidad del código:
 
@@ -18,7 +18,7 @@
     ORDER BY p.priority DESC, p.price_list DESC
         LIMIT 1
 ```
- - Esta query funciona aunque `start_date` y `end_date` sean varchar porque siguen un orden lexicográfico `YYYY-MM-DD-HH.mm.ss`, lo que lleva a simplificar mucho la lógica de negocio y, por tanto, el código.
+ - Esta query funciona aunque `start_date` y `end_date` sean `varchar(19)` porque siguen un orden lexicográfico `YYYY-MM-DD-HH.mm.ss`, lo que lleva a simplificar mucho la lógica de negocio y, por tanto, el código.
  - En el enunciado no se explica la regla de negocio a aplicar si se encuentran varios precios con la misma prioridad. Por tanto, en tal caso, he determinado recuperar la tarifa más reciente (con el `price_list` mayor).
 
 ## Ejecutar el proyecto en local :
